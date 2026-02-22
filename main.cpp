@@ -118,7 +118,6 @@ void quick_hoare_sort(vector<int>& vec) {
 }
 
 void quick_optimized_sort(vector<int>& vec, int low, int high) {
-    
     if (high - low <= kInsertionSortThreshold)
         return insertion_sort(vec, low, high);
     else {
@@ -328,7 +327,7 @@ vector<int> max_valid_lengths = {
     5'000'000,
     5'000'000,
     2'000'000,
-    5'000'000,
+    5'000'000
 };
 
 int sort_count = sort_names.size();

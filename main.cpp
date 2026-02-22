@@ -365,13 +365,13 @@ int main() {
 
         long long min_time = *min_element(all_times.begin(), all_times.end());
         long long max_time = *max_element(all_times.begin(), all_times.end());
-        long long average_time = accumulate(all_times.begin(), all_times.end(), 0ll) / all_times.size();
+        long long average_time_random = accumulate(all_times.begin() + 3, all_times.end(), 0ll) / all_times.size();
+        cout << "Среднее время на случайных тестах: ";
+        print_time(average_time_random);
         cout << "Лучшее время: ";
         print_time(min_time);
         cout << "Худшее время: ";
         print_time(max_time);
-        cout << "Среднее время: ";
-        print_time(average_time);
         cout << '\n';
     }
 }

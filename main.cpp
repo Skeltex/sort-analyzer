@@ -275,13 +275,30 @@ void generateTestAnswers() {
         sort(test_answers[i].begin(), test_answers[i].end());
 }
 
-void print_time(long long time) {
-    if (time < 1000)
-        cout << to_string(time) + " мкс\n";
-    else if (time < 1000000)
-        cout << to_string(time / 1000.0) + " мс\n";
-    else
-        cout << to_string(time / 1000000.0) + " с\n";
+string format_time(long long time) {
+    long double value;
+    string unit;
+    if (time < 1000) {
+        value = time;
+        unit = "мкс";
+    }
+    else if (time < 1'000'000) {
+        value = time / 1000.0l;
+        unit = "мс";
+    }
+    else {
+        value = time / 1'000'000.0l;
+        unit = "с";
+    }
+
+    int precision;
+    if (value < 10) precision = 2;
+    else if (value < 100) precision = 1;
+    else precision = 0;
+
+    ostringstream oss;
+    oss << fixed << setprecision(precision) << value << ' ' << unit;
+    return oss.str();
 }
 
 vector<string> sort_names = {
@@ -359,19 +376,15 @@ int main() {
         for (int j = 0; j < test_count; ++j) {
             long long time = measure_sort_time(sort_functions[i], test_cases[j], test_answers[j]);
             all_times.push_back(time);
-            cout << test_names[j] << ": ";
-            print_time(time);
+            cout << test_names[j] << ": " << format_time(time) << '\n';
         }
 
         long long min_time = *min_element(all_times.begin(), all_times.end());
         long long max_time = *max_element(all_times.begin(), all_times.end());
         long long average_time_random = accumulate(all_times.begin() + 3, all_times.end(), 0ll) / all_times.size();
-        cout << "Среднее время на случайных тестах: ";
-        print_time(average_time_random);
-        cout << "Лучшее время: ";
-        print_time(min_time);
-        cout << "Худшее время: ";
-        print_time(max_time);
+        cout << "Среднее время на случайных тестах: " << format_time(average_time_random) << '\n';
+        cout << "Лучшее время: " << format_time(min_time) << '\n';
+        cout << "Худшее время: " << format_time(max_time) << '\n';
         cout << '\n';
     }
 }

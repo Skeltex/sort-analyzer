@@ -12,7 +12,7 @@
 using namespace std;
 using namespace chrono;
 
-int input_integer(int min_value = INT_MIN, int max_value = INT_MAX) {
+int input_integer(const int min_value = INT_MIN, const int max_value = INT_MAX) {
     int result;
     while (true) {
         if (cin >> result) {
@@ -32,7 +32,7 @@ int input_integer(int min_value = INT_MIN, int max_value = INT_MAX) {
     }
 }
 
-void insertion_sort(vector<int>& vec, int low, int high) {
+void insertion_sort(vector<int>& vec, const int low, const int high) {
     for (int i = low + 1; i <= high; ++i) {
         int key = vec[i];
         int j = i - 1;
@@ -51,7 +51,7 @@ void insertion_sort(vector<int>& vec) {
 const int kInsertionSortThreshold = 16;
 
 // Выбор опорного элемента для быстрой сортировки
-int get_pivot_index(vector<int>& vec, int low, int high) {
+int get_pivot_index(vector<int>& vec, const int low, const int high) {
     int mid = (low + high) / 2;
     if (vec[low] > vec[mid])
         swap(vec[low], vec[mid]);
@@ -63,7 +63,7 @@ int get_pivot_index(vector<int>& vec, int low, int high) {
 }
 
 // Разбиение Ломуто для быстрой сортировки
-int lomuto_partition(vector<int>& vec, int low, int high) {
+int lomuto_partition(vector<int>& vec, const int low, const int high) {
     int pivot_index = get_pivot_index(vec, low, high);
     swap(vec[pivot_index], vec[high]); // Перемещаем опорный элемент в конец
 
@@ -79,8 +79,8 @@ int lomuto_partition(vector<int>& vec, int low, int high) {
 }
 
 // Разбиение Хоара для быстрой сортировки
-int hoare_partition(vector<int>& vec, int low, int high) {
-    int pivot = vec[get_pivot_index(vec, low, high)];
+int hoare_partition(vector<int>& vec, const int low, const int high) {
+    const int pivot = vec[get_pivot_index(vec, low, high)];
     int i = low, j = high;
     while (true) {
         while (vec[i] < pivot)
@@ -93,7 +93,7 @@ int hoare_partition(vector<int>& vec, int low, int high) {
     }
 }
 
-void quick_lomuto_sort(vector<int>& vec, int low, int high) {
+void quick_lomuto_sort(vector<int>& vec, const int low, const int high) {
     if (low < high) {
         int p = lomuto_partition(vec, low, high);
         quick_lomuto_sort(vec, low, p - 1);
@@ -105,7 +105,7 @@ void quick_lomuto_sort(vector<int>& vec) {
     quick_lomuto_sort(vec, 0, vec.size() - 1);
 }
 
-void quick_hoare_sort(vector<int>& vec, int low, int high) {
+void quick_hoare_sort(vector<int>& vec, const int low, const int high) {
     if (low < high) {
         int p = hoare_partition(vec, low, high);
         quick_hoare_sort(vec, low, p);
@@ -117,7 +117,7 @@ void quick_hoare_sort(vector<int>& vec) {
     quick_hoare_sort(vec, 0, vec.size() - 1);
 }
 
-void quick_optimized_sort(vector<int>& vec, int low, int high) {
+void quick_optimized_sort(vector<int>& vec, const int low, const int high) {
     if (high - low <= kInsertionSortThreshold)
         return insertion_sort(vec, low, high);
     else {
@@ -132,9 +132,9 @@ void quick_optimized_sort(vector<int>& vec) {
 }
 
 // Слияние двух отсортированных подмассивов
-void merge(vector<int>& vec, int low, int mid, int high) {
-    vector<int> leftArr(vec.begin() + low, vec.begin() + mid + 1);
-    vector<int> rightArr(vec.begin() + mid + 1, vec.begin() + high + 1);
+void merge(vector<int>& vec, const int low, const int mid, const int high) {
+    const vector<int> leftArr(vec.begin() + low, vec.begin() + mid + 1);
+    const vector<int> rightArr(vec.begin() + mid + 1, vec.begin() + high + 1);
 
     int i = 0, j = 0, k = low; // Индексы каждого из массивов
 
@@ -155,7 +155,7 @@ void merge(vector<int>& vec, int low, int mid, int high) {
         vec[k] = rightArr[j];
 }
 
-void merge_sort(vector<int>& vec, int low, int high) {
+void merge_sort(vector<int>& vec, const int low, const int high) {
     if (low < high) {
         // Делим на 2 отсортированные части
         int mid = (low + high) / 2;
@@ -171,9 +171,9 @@ void merge_sort(vector<int>& vec) {
 }
 
 // Преобразование в двоичную кучу поддерева с корнем i
-void heapify(vector<int>& vec, int n, int i) {
+void heapify(vector<int>& vec, const int n, const int i) {
     int largest = i;       // Корень - наибольший элемент
-    int left = 2 * i + 1, right = 2 * i + 2; // Дети
+    const int left = 2 * i + 1, right = 2 * i + 2; // Дети
 
     // Левый дочерний элемент больше корня
     if (left < n && vec[left] > vec[largest])
@@ -212,7 +212,7 @@ void std_sort(vector<int>& vec) {
 
 
 // Измерение времени сортировки
-long long measure_sort_time(void (*sort_function)(vector<int>&), vector<int> vec, vector<int> ans, int runs = 5) {
+long long measure_sort_time(void (* const sort_function)(vector<int>&), const vector<int>& vec, const vector<int>& ans, const int runs = 5) {
     vector<long long> times;
 
     for (int i = 0; i < runs; ++i) {
@@ -274,7 +274,7 @@ void generateTestAnswers() {
         sort(test_answers[i].begin(), test_answers[i].end());
 }
 
-string format_time(long long time) {
+string format_time(const long long time) {
     long double value;
     string unit;
     if (time < 1000) {
@@ -300,7 +300,7 @@ string format_time(long long time) {
     return oss.str();
 }
 
-vector<string> sort_names = {
+const vector<string> sort_names = {
     "Сортировка вставками",
     "Сортировка слиянием",
     "Быстрая сортировка c разбиением Ломуто",
@@ -310,7 +310,7 @@ vector<string> sort_names = {
     "Встроенная сортировка (std::sort)"
 };
 
-vector<void(*)(vector<int>&)> sort_functions = {
+const vector<void(*)(vector<int>&)> sort_functions = {
     insertion_sort,
     merge_sort,
     quick_lomuto_sort,
@@ -320,7 +320,7 @@ vector<void(*)(vector<int>&)> sort_functions = {
     std_sort
 };
 
-vector<int> max_valid_lengths = {
+const vector<int> max_valid_lengths = {
     25'000,
     500'000,
     3'500,
@@ -330,9 +330,9 @@ vector<int> max_valid_lengths = {
     5'000'000
 };
 
-int sort_count = sort_names.size();
+const int sort_count = sort_names.size();
 
-vector<string> test_names = {
+const vector<string> test_names = {
     "Отсортированный",
     "Обратный порядок",
     "Все одинаковые",
@@ -357,7 +357,7 @@ int main() {
     #endif
     cout << "Введите размер массива: ";
 
-    int n = input_integer(0, *max_element(max_valid_lengths.begin(), max_valid_lengths.end()));
+    const int n = input_integer(0, *max_element(max_valid_lengths.begin(), max_valid_lengths.end()));
     vector<int> vec(n);
 
     cout << "Генерация тестов...\n";

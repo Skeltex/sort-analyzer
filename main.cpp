@@ -355,6 +355,10 @@ int main() {
         SetConsoleOutputCP(CP_UTF8);
         SetConsoleCP(CP_UTF8);
     #endif
+    cout << "Введите, нужно ли выводить время выполнения каждого из случайных тестов\n"
+            "0 - не выводить (рекомендуется)\n"
+            "1 - выводить\n";
+    const bool print_random_test_time = input_integer(0, 1);
     cout << "Введите размер массива: ";
 
     const int n = input_integer(0, *max_element(max_valid_lengths.begin(), max_valid_lengths.end()));
@@ -375,7 +379,8 @@ int main() {
         for (int j = 0; j < test_count; ++j) {
             long long time = measure_sort_time(sort_functions[i], test_cases[j], test_answers[j]);
             all_times.push_back(time);
-            cout << test_names[j] << ": " << format_time(time) << '\n';
+            if (j < 3 || print_random_test_time)
+                cout << test_names[j] << ": " << format_time(time) << '\n';
         }
 
         long long min_time = *min_element(all_times.begin(), all_times.end());

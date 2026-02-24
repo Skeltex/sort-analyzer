@@ -212,7 +212,11 @@ void std_sort(vector<int>& vec) {
 
 
 // Измерение времени сортировки
-long long measure_sort_time(void (* const sort_function)(vector<int>&), const vector<int>& vec, const vector<int>& ans, const int runs = 5) {
+long long measure_sort_time(void (* const sort_function)(vector<int>&),
+                           const vector<int>& vec,
+                           const vector<int>& ans,
+                           const int validation_level,
+                           const int runs = 5) {
     vector<long long> times;
 
     for (int i = 0; i < runs; ++i) {
@@ -220,9 +224,9 @@ long long measure_sort_time(void (* const sort_function)(vector<int>&), const ve
 
         auto start = high_resolution_clock::now();
         sort_function(vec_copy);
-        if (!is_sorted(vec_copy.begin(), vec_copy.end()))
+        if (validation_level >= 1 && !is_sorted(vec_copy.begin(), vec_copy.end()))
             cerr << "Ошибка! Массив не отсортирован!\n";
-        else if (vec_copy != ans)
+        else if (validation_level == 2 && vec_copy != ans)
             cerr << "Ошибка! Массив изменён!\n";
         auto end = high_resolution_clock::now();
 
@@ -355,18 +359,26 @@ int main() {
         SetConsoleOutputCP(CP_UTF8);
         SetConsoleCP(CP_UTF8);
     #endif
+    
     cout << "Введите, нужно ли выводить время выполнения каждого из случайных тестов\n"
             "0 - не выводить (рекомендуется)\n"
             "1 - выводить\n";
     const bool print_random_test_time = input_integer(0, 1);
-    cout << "Введите размер массива: ";
 
+    cout << "Введите уровень проверки результатов\n"
+            "0 - не проверять\n"
+            "1 - быстрая проверка на то, является ли результирующий массив отсортированным (рекомендуется)\n"
+            "2 - полная проверка на соответствие результату\n";
+    const int validation_level = input_integer(0, 2);
+
+    cout << "Введите размер массива: ";
     const int n = input_integer(0, *max_element(max_valid_lengths.begin(), max_valid_lengths.end()));
     vector<int> vec(n);
 
     cout << "Генерация тестов...\n";
     generateTestCases(n);
-    generateTestAnswers();
+    if (validation_level == 2)
+        generateTestAnswers();
     cout << "Генерация тестов завершена\n\n";
 
     for (int i = 0; i < sort_count; ++i) {
@@ -377,7 +389,10 @@ int main() {
         }
         vector<long long> all_times;
         for (int j = 0; j < test_count; ++j) {
-            long long time = measure_sort_time(sort_functions[i], test_cases[j], test_answers[j]);
+            long long time = measure_sort_time(sort_functions[i],
+                                              test_cases[j],
+                                              validation_level == 2 ? test_answers[j] : test_cases[j],
+                                              validation_level);
             all_times.push_back(time);
             if (j < 3 || print_random_test_time)
                 cout << test_names[j] << ": " << format_time(time) << '\n';

@@ -270,8 +270,8 @@ void generateTestCases(int n) {
 // Генерация ответов на тесты
 void generateTestAnswers() {
     test_answers = test_cases;
-    for (int i = 0; i < test_cases.size(); ++i)
-        sort(test_answers[i].begin(), test_answers[i].end());
+    for (auto& test_answer : test_answers)
+        sort(test_answer.begin(), test_answer.end());
 }
 
 string format_time(const long long time) {

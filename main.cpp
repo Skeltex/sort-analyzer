@@ -357,7 +357,7 @@ int main() {
     #endif
     cout << "Введите размер массива: ";
 
-    int n = input_integer(0, 5'000'000);
+    int n = input_integer(0, *max_element(max_valid_lengths.begin(), max_valid_lengths.end()));
     vector<int> vec(n);
 
     cout << "Генерация тестов...\n";

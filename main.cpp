@@ -386,9 +386,8 @@ int main() {
         long long min_time = *min_element(all_times.begin(), all_times.end());
         long long max_time = *max_element(all_times.begin(), all_times.end());
         long long average_time_random = accumulate(all_times.begin() + 3, all_times.end(), 0ll) / (all_times.size() - 3);
-        cout << "Среднее время на случайных тестах: " << format_time(average_time_random) << '\n';
-        cout << "Лучшее время: " << format_time(min_time) << '\n';
-        cout << "Худшее время: " << format_time(max_time) << '\n';
-        cout << '\n';
+        cout << "Среднее время на случайных тестах: " << format_time(average_time_random) << '\n'
+             << "Лучшее время: " << format_time(min_time) << '\n'
+             << "Худшее время: " << format_time(max_time) << "\n\n";
     }
 }

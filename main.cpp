@@ -224,11 +224,12 @@ long long measure_sort_time(void (* const sort_function)(vector<int>&),
 
         auto start = high_resolution_clock::now();
         sort_function(vec_copy);
+        auto end = high_resolution_clock::now();
+        
         if (validation_level >= 1 && !is_sorted(vec_copy.begin(), vec_copy.end()))
             cerr << "Ошибка! Массив не отсортирован!\n";
         else if (validation_level == 2 && vec_copy != ans)
             cerr << "Ошибка! Массив изменён!\n";
-        auto end = high_resolution_clock::now();
 
         auto duration = duration_cast<microseconds>(end - start).count();
         times.push_back(duration);

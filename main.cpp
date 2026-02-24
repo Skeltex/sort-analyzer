@@ -367,7 +367,7 @@ int main() {
     cout << "Генерация тестов...\n";
     generateTestCases(n);
     generateTestAnswers();
-    cout << "Генерация тестов завершена\n";
+    cout << "Генерация тестов завершена\n\n";
 
     for (int i = 0; i < sort_count; ++i) {
         cout << "Тестируется " << sort_names[i] << '\n';
